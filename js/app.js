@@ -63,11 +63,11 @@ puertas.addEventListener('change', (e) => {
 
     filtrarAuto();
 })
-transmision.addEventListener('change', (e) => {
+transmision.addEventListener('input', e => {
     datosBusqueda.transmision = e.target.value
-
+    // Mandar llamar la función de filtrar Autos
     filtrarAuto();
-})
+});
 color.addEventListener('change', (e) => {
     datosBusqueda.color = e.target.value
 
@@ -113,10 +113,23 @@ function llenarSelect() {
 }
 //funcion qu efiltra en base a la busquda--funcion de alto nivel, es una funcion que toma otra funcion
 function filtrarAuto() {
-    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo).filter(filtrarPuertas).filter(filtrarTranmision).filter(filtrarColor);
+    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo).filter(filtrarPuertas).filter(filtrarTransmision).filter(filtrarColor);
 
-    //console.log(resultado)
-    mostrarAutos(resultado);
+
+    if (resultado.length) {
+        //console.log(resultado)
+        mostrarAutos(resultado);
+    } else {
+        noResultado()
+    }
+}
+function noResultado() {
+    limpiarHTML();
+    const noResultado = document.createElement('div');
+    noResultado.classList.add('alerta', 'error');
+    noResultado.textContent = 'No hay Resultados, Intenta con otros términos de búsqueda'
+    resultado.appendChild(noResultado);
+
 }
 function filtrarMarca(auto) {
     if (datosBusqueda.marca) {
@@ -148,9 +161,9 @@ function filtrarPuertas(auto) {
     }
     return auto;
 }
-function filtrarTranmision(auto) {
+function filtrarTransmision(auto) {
     if (datosBusqueda.transmision) {
-        return auto.transmision === datosBusqueda.transmision
+        return auto.transmision === datosBusqueda.transmision;
     }
     return auto;
 }
